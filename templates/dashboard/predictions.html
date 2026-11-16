@@ -6,7 +6,6 @@
   <div class="page-header-left">
     <h1>🤖 Predictions</h1>
     <p class="page-subtitle">ML-powered item sales forecasting using Ridge regression</p>
-    {% if has_model %}<span class="page-header-badge">Model ready</span>{% endif %}
   </div>
 </div>
 
@@ -28,20 +27,22 @@
   <div class="section-divider"><h2>Prediction Insights</h2></div>
 
   <div class="chart-grid">
-    <div class="card widget"
-         id="feature-importance"
-         hx-get="{% url 'dashboard:partials_feature_importance' %}"
-         hx-trigger="load"
-         hx-swap="innerHTML">
-      <div class="htmx-indicator widget-loading"><span class="spinner"></span>Loading…</div>
-    </div>
+    <div class="chart-stack">
+      <div class="card widget"
+           id="feature-importance"
+           hx-get="{% url 'dashboard:partials_feature_importance' %}"
+           hx-trigger="load"
+           hx-swap="innerHTML">
+        <div class="htmx-indicator widget-loading"><span class="spinner"></span>Loading…</div>
+      </div>
 
-    <div class="card widget"
-         id="chart-actual-vs-predicted"
-         hx-get="{% url 'dashboard:partials_chart_actual_vs_predicted' %}"
-         hx-trigger="load"
-         hx-swap="innerHTML">
-      <div class="htmx-indicator widget-loading"><span class="spinner"></span>Loading…</div>
+      <div class="card widget"
+           id="chart-actual-vs-predicted"
+           hx-get="{% url 'dashboard:partials_chart_actual_vs_predicted' %}"
+           hx-trigger="load"
+           hx-swap="innerHTML">
+        <div class="htmx-indicator widget-loading"><span class="spinner"></span>Loading…</div>
+      </div>
     </div>
 
     <div class="card widget"

@@ -929,6 +929,12 @@ body.sidebar-collapsed-state .main-wrapper {
   margin-bottom: 20px;
 }
 
+.chart-stack {
+  display: grid;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
 .chart-wrap { position: relative; height: 240px; }
 .chart-wrap.chart-tall { height: 300px; }
 
