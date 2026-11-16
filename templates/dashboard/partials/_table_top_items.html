@@ -1,1 +1,45 @@
-{# Table: top and bottom items by sales. #}
+{% load dashboard_extras %}
+<div class="top-items-cols">
+  <div>
+    <h3 class="widget-title">Top 10 Items by Sales</h3>
+    <table class="data-table">
+      <thead>
+        <tr><th>Rank</th><th>Item</th><th>Type</th><th>Outlets</th><th>Sales</th></tr>
+      </thead>
+      <tbody>
+        {% for item in top_bottom.top %}
+          <tr>
+            <td>{{ item.rank }}</td>
+            <td>{{ item.item_id }}</td>
+            <td>{{ item.item_type }}</td>
+            <td>{{ item.outlets }}</td>
+            <td>{{ item.sales|thousands }}</td>
+          </tr>
+        {% empty %}
+          <tr><td colspan="5">No records match the current filters.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <div>
+    <h3 class="widget-title">Bottom 10 Items by Sales</h3>
+    <table class="data-table">
+      <thead>
+        <tr><th>Rank</th><th>Item</th><th>Type</th><th>Outlets</th><th>Sales</th></tr>
+      </thead>
+      <tbody>
+        {% for item in top_bottom.bottom %}
+          <tr>
+            <td>{{ item.rank }}</td>
+            <td>{{ item.item_id }}</td>
+            <td>{{ item.item_type }}</td>
+            <td>{{ item.outlets }}</td>
+            <td>{{ item.sales|thousands }}</td>
+          </tr>
+        {% empty %}
+          <tr><td colspan="5">No records match the current filters.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>

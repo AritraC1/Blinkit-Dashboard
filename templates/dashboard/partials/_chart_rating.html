@@ -1,1 +1,7 @@
-{# Chart: rating distribution. #}
+{# Chart: rating distribution in 0.5-wide bins, because thousands of rows sit at exactly 4.0. #}
+<h3 class="widget-title">Rating Distribution</h3>
+<div class="chart-wrap">
+  <canvas data-chart="bar" data-source="chart-rating-data"></canvas>
+</div>
+<p class="caption">Records are binned in 0.5 steps; a large share sits at exactly 4.0.</p>
+{{ rows|json_script:"chart-rating-data" }}

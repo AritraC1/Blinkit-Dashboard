@@ -1,1 +1,7 @@
-{# Chart: sales by location tier and outlet size. #}
+{# Chart: sales by location tier, one bar group per size. #}
+<h3 class="widget-title">Sales by Location Tier &amp; Outlet Size</h3>
+<div class="chart-wrap">
+  <canvas data-chart="grouped" data-source="chart-tier-size-data"></canvas>
+</div>
+<p class="caption">Outlet size grouping is distorted by a few inconsistent outlets, so read this with care.</p>
+{{ rows|json_script:"chart-tier-size-data" }}

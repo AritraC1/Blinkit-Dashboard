@@ -1,0 +1,6 @@
+{# Chart: total sales by outlet establishment year. #}
+<h3 class="widget-title">Sales by Establishment Year</h3>
+<div class="chart-wrap">
+  <canvas data-chart="line" data-source="chart-year-data"></canvas>
+</div>
+{{ rows|json_script:"chart-year-data" }}

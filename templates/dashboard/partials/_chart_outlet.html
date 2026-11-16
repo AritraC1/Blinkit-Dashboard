@@ -1,1 +1,7 @@
-{# Chart: sales by outlet. #}
+{# Chart: sales by outlet type. Average sales is almost flat across outlet types (~140-142) - a real feature of the data, not a bug. #}
+<h3 class="widget-title">Sales by Outlet Type</h3>
+<div class="chart-wrap">
+  <canvas data-chart="bar" data-source="chart-outlet-data"></canvas>
+</div>
+<p class="caption">Average sales is nearly flat across outlet types (about 140-142) - a real finding in this data.</p>
+{{ rows|json_script:"chart-outlet-data" }}

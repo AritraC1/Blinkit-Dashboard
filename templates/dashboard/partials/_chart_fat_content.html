@@ -1,1 +1,6 @@
 {# Chart: fat content split. #}
+<h3 class="widget-title">Sales by Fat Content</h3>
+<div class="chart-wrap">
+  <canvas data-chart="doughnut" data-source="chart-fat-content-data"></canvas>
+</div>
+{{ rows|json_script:"chart-fat-content-data" }}

@@ -1,6 +1,53 @@
-:root { --bg: #f6f7f9; --card: #fff; --text: #1d2330; --accent: #0c831f; --border: #e3e6ec; }
+:root { --bg: #f6f7f9; --card: #fff; --text: #1d2330; --muted: #5a6270; --accent: #0c831f; --border: #e3e6ec; }
 * { box-sizing: border-box; }
 body { margin: 0; font-family: system-ui, -apple-system, "Segoe UI", sans-serif; background: var(--bg); color: var(--text); }
 .topbar { display: flex; align-items: center; justify-content: space-between; padding: .75rem 1.5rem; background: var(--card); border-bottom: 1px solid var(--border); }
 .topbar nav a { margin-left: 1rem; color: var(--accent); text-decoration: none; font-weight: 600; }
-.container { max-width: 1200px; margin: 1.5rem auto; padding: 0 1.5rem; }
+.container { max-width: 1400px; margin: 1.5rem auto; padding: 0 1.5rem; }
+
+/* ---- Dashboard layout: filter sidebar + widget area ----------------------- */
+.dashboard-layout { display: grid; grid-template-columns: 260px 1fr; gap: 1.25rem; align-items: start; }
+@media (max-width: 920px) { .dashboard-layout { grid-template-columns: 1fr; } }
+
+.card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 1rem; }
+
+.sidebar { position: sticky; top: 1rem; }
+.sidebar-title { margin: 0 0 .25rem; font-size: 1rem; }
+.sidebar label { display: block; font-size: .75rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .03em; margin: .8rem 0 .25rem; }
+.sidebar select { width: 100%; padding: .4rem .5rem; border: 1px solid var(--border); border-radius: 6px; background: var(--card); font-size: .9rem; }
+.filter-actions { display: flex; align-items: center; gap: .75rem; margin-top: 1rem; }
+.btn { background: var(--accent); color: #fff; border: none; border-radius: 6px; padding: .45rem .9rem; font-weight: 600; cursor: pointer; }
+.reset-link { color: var(--muted); font-size: .85rem; }
+
+/* ---- Widgets -------------------------------------------------------------- */
+.dashboard-area { min-width: 0; }
+.widget { min-height: 3rem; }
+.widget-kpis { min-height: 0; }
+.widget-title { margin: 0 0 .75rem; font-size: .95rem; font-weight: 700; }
+.caption { font-size: .75rem; color: var(--muted); margin: .5rem 0 0; }
+
+.kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1rem; }
+.kpi-card { display: flex; flex-direction: column; gap: .25rem; }
+.kpi-value { font-size: 1.5rem; font-weight: 700; }
+.kpi-label { font-size: .75rem; color: var(--muted); text-transform: uppercase; letter-spacing: .03em; }
+
+.chart-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1rem; margin-top: 1rem; }
+.chart-wrap { position: relative; height: 240px; }
+.chart-wrap.chart-tall { height: 300px; }
+
+.widget-top-items { margin-top: 1rem; }
+.top-items-cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; }
+
+.data-table { width: 100%; border-collapse: collapse; font-size: .85rem; }
+.data-table th, .data-table td { text-align: left; padding: .35rem .5rem; border-bottom: 1px solid var(--border); }
+.data-table th { font-size: .7rem; text-transform: uppercase; letter-spacing: .03em; color: var(--muted); }
+.data-table td:last-child, .data-table th:last-child { text-align: right; }
+
+/* ---- HTMX loading indicator ----------------------------------------------- */
+.htmx-indicator { opacity: 0; transition: opacity 150ms ease-in; }
+.htmx-request .htmx-indicator { opacity: 1; }
+.htmx-request.htmx-indicator { opacity: 1; }
+
+.widget-loading { display: flex; align-items: center; gap: .5rem; padding: .75rem 0; color: var(--muted); font-size: .85rem; }
+.spinner { width: 1rem; height: 1rem; border: 2px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin .7s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }

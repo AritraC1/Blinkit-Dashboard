@@ -1,1 +1,23 @@
-{# KPI cards: total sales, avg sales, avg rating, items, outlets. #}
+{% load dashboard_extras %}
+<div class="kpi-grid">
+  <div class="card kpi-card">
+    <span class="kpi-value">{{ kpis.total_sales|compact }}</span>
+    <span class="kpi-label">Total Sales</span>
+  </div>
+  <div class="card kpi-card">
+    <span class="kpi-value">{{ kpis.avg_sales|one_decimal }}</span>
+    <span class="kpi-label">Avg Sales / Record</span>
+  </div>
+  <div class="card kpi-card">
+    <span class="kpi-value">{{ kpis.avg_rating|one_decimal }}</span>
+    <span class="kpi-label">Avg Rating</span>
+  </div>
+  <div class="card kpi-card">
+    <span class="kpi-value">{{ kpis.item_count|thousands }}</span>
+    <span class="kpi-label">Items</span>
+  </div>
+  <div class="card kpi-card">
+    <span class="kpi-value">{{ kpis.outlet_count|thousands }}</span>
+    <span class="kpi-label">Outlets</span>
+  </div>
+</div>

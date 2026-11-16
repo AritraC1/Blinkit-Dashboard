@@ -1,1 +1,17 @@
-{# HTMX filter form: hx-get + hx-trigger=change, targets the dashboard area. #}
+{# HTMX filter form: any change re-GETs the overview page, which returns only the dashboard area, and pushes the filtered URL so views are shareable. #}
+<h2 class="sidebar-title">Filters</h2>
+<form id="filter-form"
+      hx-get="{% url 'dashboard:overview' %}"
+      hx-target="#dashboard-area"
+      hx-swap="outerHTML"
+      hx-trigger="change, submit"
+      hx-push-url="true">
+  {% for field in filter_form %}
+    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+    {{ field }}
+  {% endfor %}
+  <div class="filter-actions">
+    <button type="submit" class="btn">Apply</button>
+    <a href="{% url 'dashboard:overview' %}" class="reset-link">Reset</a>
+  </div>
+</form>

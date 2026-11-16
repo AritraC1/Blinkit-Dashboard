@@ -1,1 +1,6 @@
-{# Chart: sales by item type. #}
+{# Chart: sales by item type (horizontal bars, many types). #}
+<h3 class="widget-title">Sales by Item Type</h3>
+<div class="chart-wrap chart-tall">
+  <canvas data-chart="bar-horizontal" data-source="chart-item-type-data"></canvas>
+</div>
+{{ rows|json_script:"chart-item-type-data" }}
