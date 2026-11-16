@@ -23,6 +23,7 @@ class OutletSize(models.TextChoices):
 class FatContent(models.TextChoices):
     LOW_FAT = "Low Fat", "Low Fat"
     REGULAR = "Regular", "Regular"
+    NON_EDIBLE = "Non-Edible", "Non-Edible"
 
 
 class ItemCategory(models.TextChoices):
