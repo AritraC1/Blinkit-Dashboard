@@ -1,10 +1,19 @@
 {% extends "base.html" %}
 {% block title %}Overview | Blinkit Dashboard{% endblock %}
-{% block content %}
-<div class="dashboard-layout">
-  <aside class="sidebar card">
+
+{% block sidebar_extra %}
+  <div class="sidebar-filters">
     {% include "dashboard/partials/_filters.html" %}
-  </aside>
-  {% include "dashboard/_dashboard_area.html" %}
+  </div>
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div class="page-header-left">
+    <h1>📊 Overview</h1>
+    <p class="page-subtitle">Sales analytics &amp; outlet performance across all stores</p>
+  </div>
 </div>
+
+{% include "dashboard/_dashboard_area.html" %}
 {% endblock %}

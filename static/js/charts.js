@@ -5,18 +5,26 @@
 (function () {
   "use strict";
 
+  /* Blinkit brand palette: green-yellow alternating with depth */
   const PALETTE = [
-    "#0c831f", "#1f77b4", "#ff7f0e", "#9467bd", "#8c564b",
-    "#e377c2", "#7f7f7f", "#bcbd22", "#17becf", "#aec7e8",
-    "#ffbb78", "#98df8a", "#ff9896", "#c5b0d5", "#c49c94"
+    "#0C831F", "#F9C023", "#16A34A", "#FBBF24",
+    "#15803D", "#F59E0B", "#166534", "#D97706",
+    "#14532D", "#B45309", "#052e16", "#92400e",
+    "#1aab36", "#e6ae1a", "#27AE60"
   ];
 
   const BASE_OPTIONS = {
     responsive: true,
     maintainAspectRatio: false,
+    animation: { duration: 500, easing: "easeOutQuart" },
     plugins: {
       legend: { display: false },
       tooltip: {
+        backgroundColor: "#111827",
+        titleColor: "#F9FAFB",
+        bodyColor: "#D1D5DB",
+        padding: 10,
+        cornerRadius: 8,
         callbacks: {
           label: (ctx) => {
             const value = ctx.parsed.y !== undefined ? ctx.parsed.y : ctx.parsed;
@@ -29,14 +37,20 @@
       }
     },
     scales: {
-      x: { ticks: { color: "#5a6270" }, grid: { display: false } },
+      x: {
+        ticks: { color: "#6B7280", font: { size: 11, family: "Inter, system-ui" } },
+        grid: { display: false },
+        border: { display: false }
+      },
       y: {
         ticks: {
-          color: "#5a6270",
+          color: "#6B7280",
+          font: { size: 11, family: "Inter, system-ui" },
           callback: (value) =>
-            Math.abs(value) >= 1000 ? value / 1000 + "K" : value
+            Math.abs(value) >= 1000 ? (value / 1000).toFixed(0) + "K" : value
         },
-        grid: { color: "#eef0f4" },
+        grid: { color: "#F3F4F6", drawBorder: false },
+        border: { display: false, dash: [4, 4] },
         beginAtZero: true
       }
     }
@@ -76,9 +90,14 @@
             label: "Sales",
             data: data.map((r) => r.sales),
             borderColor: PALETTE[0],
-            backgroundColor: PALETTE[0],
-            tension: 0.25,
-            fill: false
+            backgroundColor: "rgba(12,131,31,0.10)",
+            tension: 0.35,
+            fill: true,
+            pointBackgroundColor: PALETTE[0],
+            pointBorderColor: "#fff",
+            pointBorderWidth: 2,
+            pointRadius: 4,
+            pointHoverRadius: 7
           }
         ]
       },

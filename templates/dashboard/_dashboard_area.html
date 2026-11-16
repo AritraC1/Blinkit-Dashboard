@@ -1,12 +1,18 @@
-{# The widget grid. Rendered inside the full page, and also returned on its own when the filter form swaps it. #}
+{# Widget grid. Rendered inside overview AND returned on its own after HTMX filter swaps. #}
 <section id="dashboard-area" class="dashboard-area">
-  {# KPI row: one widget, five cards. #}
+
+  {# ── KPI Row ─────────────────────────────────────── #}
   <div class="widget widget-kpis"
        hx-get="{% url 'dashboard:partials_kpis' %}?{{ request.GET.urlencode }}"
        hx-trigger="load"
        hx-swap="innerHTML">
-    <div class="htmx-indicator widget-loading"><span class="spinner"></span>Loading…</div>
+    <div class="htmx-indicator widget-loading">
+      <span class="spinner"></span>Loading KPIs…
+    </div>
   </div>
+
+  {# ── Charts ──────────────────────────────────────── #}
+  <div class="section-divider"><h2>Charts &amp; Analytics</h2></div>
 
   <div class="chart-grid">
     <div class="card widget"
@@ -52,10 +58,14 @@
     </div>
   </div>
 
+  {# ── Top Items Table ──────────────────────────────── #}
+  <div class="section-divider"><h2>Top Items</h2></div>
+
   <div class="card widget widget-top-items"
        hx-get="{% url 'dashboard:partials_top_items' %}?{{ request.GET.urlencode }}"
        hx-trigger="load"
        hx-swap="innerHTML">
     <div class="htmx-indicator widget-loading"><span class="spinner"></span>Loading…</div>
   </div>
+
 </section>

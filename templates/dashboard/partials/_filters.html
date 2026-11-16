@@ -1,17 +1,40 @@
-{# HTMX filter form: any change re-GETs the overview page, which returns only the dashboard area, and pushes the filtered URL so views are shareable. #}
-<h2 class="sidebar-title">Filters</h2>
+{# HTMX filter form: any change re-GETs the overview page #}
+<div class="filter-section-title">Filter Panel</div>
 <form id="filter-form"
+      class="filter-form"
       hx-get="{% url 'dashboard:overview' %}"
       hx-target="#dashboard-area"
       hx-swap="outerHTML"
       hx-trigger="change, submit"
       hx-push-url="true">
-  {% for field in filter_form %}
-    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-    {{ field }}
-  {% endfor %}
+  <div class="filter-group">
+    <label for="{{ filter_form.outlet_type.id_for_label }}">Outlet Type</label>
+    {{ filter_form.outlet_type }}
+  </div>
+  <div class="filter-group">
+    <label for="{{ filter_form.location_tier.id_for_label }}">Location Tier</label>
+    {{ filter_form.location_tier }}
+  </div>
+  <div class="filter-group">
+    <label for="{{ filter_form.item_type.id_for_label }}">Item Type</label>
+    {{ filter_form.item_type }}
+  </div>
+  <div class="filter-group">
+    <label for="{{ filter_form.fat_content.id_for_label }}">Fat Content</label>
+    {{ filter_form.fat_content }}
+  </div>
+  <div class="filter-years-row">
+    <div class="filter-group">
+      <label for="{{ filter_form.year_min.id_for_label }}">From Year</label>
+      {{ filter_form.year_min }}
+    </div>
+    <div class="filter-group">
+      <label for="{{ filter_form.year_max.id_for_label }}">To Year</label>
+      {{ filter_form.year_max }}
+    </div>
+  </div>
   <div class="filter-actions">
-    <button type="submit" class="btn">Apply</button>
-    <a href="{% url 'dashboard:overview' %}" class="reset-link">Reset</a>
+    <button type="submit" class="btn-apply">Apply Filters</button>
+    <a href="{% url 'dashboard:overview' %}" class="btn-reset">Reset</a>
   </div>
 </form>

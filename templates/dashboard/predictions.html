@@ -1,19 +1,32 @@
 {% extends "base.html" %}
 {% block title %}Predictions | Blinkit Dashboard{% endblock %}
+
 {% block content %}
-<h1>Predictions</h1>
+<div class="page-header">
+  <div class="page-header-left">
+    <h1>🤖 Predictions</h1>
+    <p class="page-subtitle">ML-powered item sales forecasting using Ridge regression</p>
+    {% if has_model %}<span class="page-header-badge">Model ready</span>{% endif %}
+  </div>
+</div>
 
 {% if has_model %}
-  {# Model card on top #}
+
+  {# ── Model Metrics ─────────────────────────── #}
+  <div class="section-divider"><h2>Model Performance</h2></div>
+
   <div class="card widget"
        id="model-metrics"
        hx-get="{% url 'dashboard:partials_model_metrics' %}"
        hx-trigger="load"
-       hx-swap="innerHTML">
-    <div class="htmx-indicator widget-loading"><span class="spinner"></span>Loading…</div>
+       hx-swap="innerHTML"
+       style="margin-bottom: 20px;">
+    <div class="htmx-indicator widget-loading"><span class="spinner"></span>Loading model metrics…</div>
   </div>
 
-  {# Charts in the middle #}
+  {# ── Insight Charts ────────────────────────── #}
+  <div class="section-divider"><h2>Prediction Insights</h2></div>
+
   <div class="chart-grid">
     <div class="card widget"
          id="feature-importance"
@@ -40,19 +53,32 @@
     </div>
   </div>
 
-  {# Form and result at the bottom #}
+  {# ── Predict Form ──────────────────────────── #}
+  <div class="section-divider"><h2>Try a Prediction</h2></div>
+
   <div class="predict-layout">
     <div class="card"
          id="predict-form-box"
          hx-get="{% url 'dashboard:partials_predict_form' %}"
          hx-trigger="load"
          hx-swap="innerHTML">
-      <div class="htmx-indicator widget-loading"><span class="spinner"></span>Loading…</div>
+      <div class="htmx-indicator widget-loading"><span class="spinner"></span>Loading form…</div>
     </div>
+
     <div class="card" id="predict-result">
-      <p class="empty-state">Fill in the form to get a predicted sales value.</p>
+      <div class="empty-state">
+        <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="var(--bk-yellow)" stroke-width="1.5" stroke-linecap="round" style="display:block; margin:0 auto 12px;">
+          <circle cx="12" cy="12" r="10"/>
+          <polyline points="12 8 12 12 14 14"/>
+        </svg>
+        <p style="font-weight:600; margin:0 0 4px;">Awaiting input</p>
+        <p style="font-size:0.82rem; margin:0;">Fill in the form on the left to predict item sales.</p>
+      </div>
     </div>
   </div>
+
+  {# ── Recent Predictions ────────────────────── #}
+  <div class="section-divider"><h2>Recent Predictions</h2></div>
 
   <div class="card widget recent-predictions"
        id="recent-predictions-box"
@@ -61,11 +87,19 @@
        hx-swap="innerHTML">
     <div class="htmx-indicator widget-loading"><span class="spinner"></span>Loading…</div>
   </div>
+
 {% else %}
-  <div class="card">
-    <p class="empty-state">
-      No model trained yet — run <code>uv run python manage.py train_model</code>.
-    </p>
+  <div class="card" style="margin-top: 8px;">
+    <div class="empty-state">
+      <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="var(--bk-yellow)" stroke-width="1.5" stroke-linecap="round" style="display:block; margin:0 auto 14px;">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="12" y1="8" x2="12" y2="12"/>
+        <line x1="12" y1="16" x2="12.01" y2="16"/>
+      </svg>
+      <p style="font-weight:700; font-size:1rem; margin:0 0 6px; color:var(--bk-text);">No model trained yet</p>
+      <p style="font-size:0.85rem; margin:0 0 16px;">Run the following command to train the model:</p>
+      <code style="background:#F4F5F7; border:1px solid var(--bk-border); padding:8px 14px; border-radius:8px; font-size:0.82rem; display:inline-block;">uv run python manage.py train_model</code>
+    </div>
   </div>
 {% endif %}
 {% endblock %}
