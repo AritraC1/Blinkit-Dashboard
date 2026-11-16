@@ -1,6 +1,13 @@
-{# Chart: total sales by outlet establishment year. #}
+{# Chart: total sales per outlet establishment year. #}
 <h3 class="widget-title">Sales by Establishment Year</h3>
-<div class="chart-wrap">
-  <canvas data-chart="line" data-source="chart-year-data"></canvas>
+{% if has_data %}
+<div class="chart-wrap chart-tall">
+  <canvas data-chart="bar" data-source="chart-year-data"></canvas>
 </div>
 {{ rows|json_script:"chart-year-data" }}
+{% else %}
+<div class="empty-state">
+  <p style="font-weight:600; margin:0 0 4px;">{% if not db_has_data %}No data loaded yet{% else %}No records match the current filters{% endif %}.</p>
+  <p style="font-size:0.82rem; margin:0;">{% if not db_has_data %}Run <code>uv run python manage.py run_etl</code> to import sales data.{% else %}Try widening the filter selection.{% endif %}</p>
+</div>
+{% endif %}

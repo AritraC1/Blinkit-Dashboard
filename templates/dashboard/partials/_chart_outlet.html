@@ -1,7 +1,13 @@
-{# Chart: sales by outlet type. Average sales is almost flat across outlet types (~140-142) - a real feature of the data, not a bug. #}
+{# Chart: total and average sales per outlet type. #}
 <h3 class="widget-title">Sales by Outlet Type</h3>
-<div class="chart-wrap">
+{% if has_data %}
+<div class="chart-wrap chart-tall">
   <canvas data-chart="bar" data-source="chart-outlet-data"></canvas>
 </div>
-<p class="caption">Average sales is nearly flat across outlet types (about 140-142) - a real finding in this data.</p>
 {{ rows|json_script:"chart-outlet-data" }}
+{% else %}
+<div class="empty-state">
+  <p style="font-weight:600; margin:0 0 4px;">{% if not db_has_data %}No data loaded yet{% else %}No records match the current filters{% endif %}.</p>
+  <p style="font-size:0.82rem; margin:0;">{% if not db_has_data %}Run <code>uv run python manage.py run_etl</code> to import sales data.{% else %}Try widening the filter selection.{% endif %}</p>
+</div>
+{% endif %}

@@ -288,6 +288,49 @@ class ViewTests(SelectorTestCase):
         self.assertIn("300", content)
         self.assertIn('2</span>', content)  # outlet count stays as markup
 
+    def test_overview_shows_empty_state_when_no_data_loaded(self):
+        SalesRecord.objects.all().delete()
+        response = self.client.get(reverse("dashboard:overview"))
+        self.assertEqual(response.status_code, 200)
+        content = response.content.decode()
+        self.assertIn("No data loaded yet", content)
+        self.assertIn("run_etl", content)
+
+    def test_footer_shows_data_source_and_etl_status(self):
+        SalesRecord.objects.all().delete()
+        response = self.client.get(reverse("dashboard:overview"))
+        self.assertEqual(response.status_code, 200)
+        content = response.content.decode()
+        self.assertIn("BlinkIT_Grocery_Data.xlsx", content)
+        # The test database has no cleaned CSV, so ETL has not been run.
+        self.assertIn("Last ETL", content)
+
+    def test_kpis_show_empty_state_when_filter_excludes_everything(self):
+        response = self.client.get(
+            reverse("dashboard:partials_kpis"), {"outlet": "DOES-NOT-EXIST"}
+        )
+        self.assertEqual(response.status_code, 200)
+        content = response.content.decode()
+        self.assertIn("No records match the current filters", content)
+
+    def test_chart_partial_shows_empty_state_when_filter_excludes_everything(self):
+        response = self.client.get(
+            reverse("dashboard:partials_chart_item_type"),
+            {"outlet": "DOES-NOT-EXIST"},
+        )
+        self.assertEqual(response.status_code, 200)
+        content = response.content.decode()
+        self.assertIn("No records match the current filters", content)
+        self.assertNotIn("<canvas", content)
+
+    def test_top_items_shows_empty_state_when_no_data_loaded(self):
+        SalesRecord.objects.all().delete()
+        response = self.client.get(reverse("dashboard:partials_top_items"))
+        self.assertEqual(response.status_code, 200)
+        content = response.content.decode()
+        self.assertIn("No data loaded yet", content)
+        self.assertIn("run_etl", content)
+
 
 class TemplateTagTests(TestCase):
     def test_thousands(self):

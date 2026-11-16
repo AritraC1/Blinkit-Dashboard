@@ -16,7 +16,7 @@
             <td>{{ item.sales|thousands }}</td>
           </tr>
         {% empty %}
-          <tr><td colspan="5">No records match the current filters.</td></tr>
+          <tr><td colspan="5">{% if db_has_data %}No records match the current filters.{% else %}No data loaded yet — run uv run python manage.py run_etl.{% endif %}</td></tr>
         {% endfor %}
       </tbody>
     </table>
@@ -37,7 +37,7 @@
             <td>{{ item.sales|thousands }}</td>
           </tr>
         {% empty %}
-          <tr><td colspan="5">No records match the current filters.</td></tr>
+          <tr><td colspan="5">{% if db_has_data %}No records match the current filters.{% else %}No data loaded yet — run uv run python manage.py run_etl.{% endif %}</td></tr>
         {% endfor %}
       </tbody>
     </table>

@@ -1,7 +1,14 @@
 {# Chart: rating distribution in 0.5-wide bins, because thousands of rows sit at exactly 4.0. #}
 <h3 class="widget-title">Rating Distribution</h3>
+{% if has_data %}
 <div class="chart-wrap">
   <canvas data-chart="bar" data-source="chart-rating-data"></canvas>
 </div>
-<p class="caption">Records are binned in 0.5 steps; a large share sits at exactly 4.0.</p>
 {{ rows|json_script:"chart-rating-data" }}
+<p class="caption">Records are binned in 0.5 steps; a large share sits at exactly 4.0.</p>
+{% else %}
+<div class="empty-state">
+  <p style="font-weight:600; margin:0 0 4px;">{% if not db_has_data %}No data loaded yet{% else %}No records match the current filters{% endif %}.</p>
+  <p style="font-size:0.82rem; margin:0;">{% if not db_has_data %}Run <code>uv run python manage.py run_etl</code> to import sales data.{% else %}Try widening the filter selection.{% endif %}</p>
+</div>
+{% endif %}

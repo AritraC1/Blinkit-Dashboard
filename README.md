@@ -53,6 +53,33 @@ Run the test suite with:
 uv run python manage.py test
 ```
 
+## Production deployment
+
+The app is designed to run behind gunicorn with WhiteNoise serving static
+files. The required run order is:
+
+```bash
+# 1. Apply database migrations
+uv run python manage.py migrate
+
+# 2. Import and validate the Blinkit sales data
+uv run python manage.py run_etl
+
+# 3. Train and activate the sales prediction model
+uv run python manage.py train_model
+
+# 4. Collect static files for WhiteNoise
+uv run python manage.py collectstatic
+
+# 5. Serve with gunicorn (config/prod settings)
+DJANGO_SETTINGS_MODULE=config.settings.prod uv run gunicorn config.wsgi
+```
+
+Set `SECRET_KEY`, `ALLOWED_HOSTS`, `DATABASE_URL` (Postgres) or leave the
+default SQLite, and `SECURE_SSL_REDIRECT` via the environment or a `.env`
+file. See `config/settings/prod.py` for the env-driven values. Gunicorn is a
+declared dependency (`pyproject.toml`) and is installed by `uv sync`.
+
 ## Docker Compose
 
 Compose starts PostgreSQL and the Django app. Migrations run automatically when the app starts. The raw-data directory is mounted read-only and model artifacts are persisted in a named volume.

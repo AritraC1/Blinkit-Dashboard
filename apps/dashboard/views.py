@@ -11,7 +11,7 @@ from __future__ import annotations
 from django.db.models import Count
 from django.shortcuts import render
 
-from apps.core.models import Item, LocationTier, Outlet, OutletType
+from apps.core.models import Item, LocationTier, Outlet, OutletType, SalesRecord
 from apps.ml import predict, registry
 from apps.ml.models import PredictionLog
 
@@ -29,6 +29,26 @@ def _records(request):
     return selectors.base_queryset(_filters(request))
 
 
+def _widget_context(request, **extra) -> dict:
+    """Common context for dashboard widgets.
+
+    Besides ``extra`` it always provides:
+    * ``filters`` — the active filter dict,
+    * ``db_has_data`` — whether any SalesRecord exists at all (i.e. run_etl has
+      been run),
+    * ``has_data`` — whether any record matches the current filters.
+    Widgets use these to render friendly empty states instead of blank charts
+    or tables.
+    """
+    records = _records(request)
+    return {
+        "filters": selectors.filters_from_params(request.GET),
+        "db_has_data": SalesRecord.objects.exists(),
+        "has_data": records.exists(),
+        **extra,
+    }
+
+
 def _recent_predictions(n: int = 10):
     """The last n PredictionLog rows, newest first."""
     return list(PredictionLog.objects.select_related("model_run")[:n])
@@ -43,6 +63,7 @@ def overview(request):
         "filters": _filters(request),
         "all_outlets": all_outlets,
     }
+    context.update(_widget_context(request))
     if request.headers.get("HX-Request"):
         return render(request, "dashboard/_dashboard_area.html", context)
     return render(request, "dashboard/overview.html", context)
@@ -248,10 +269,11 @@ def recent_predictions(request):
 
 
 def kpi_cards(request):
+    records = _records(request)
     return render(
         request,
         "dashboard/partials/_kpi_cards.html",
-        {"kpis": selectors.kpi_summary(_records(request))},
+        _widget_context(request, kpis=selectors.kpi_summary(records)),
     )
 
 
@@ -259,7 +281,7 @@ def chart_item_type(request):
     return render(
         request,
         "dashboard/partials/_chart_item_type.html",
-        {"rows": selectors.sales_by_item_type(_records(request))},
+        _widget_context(request, rows=selectors.sales_by_item_type(_records(request))),
     )
 
 
@@ -267,7 +289,7 @@ def chart_outlet(request):
     return render(
         request,
         "dashboard/partials/_chart_outlet.html",
-        {"rows": selectors.sales_by_outlet_type(_records(request))},
+        _widget_context(request, rows=selectors.sales_by_outlet_type(_records(request))),
     )
 
 
@@ -275,7 +297,7 @@ def chart_tier_size(request):
     return render(
         request,
         "dashboard/partials/_chart_tier_size.html",
-        {"rows": selectors.sales_by_tier_size(_records(request))},
+        _widget_context(request, rows=selectors.sales_by_tier_size(_records(request))),
     )
 
 
@@ -283,7 +305,7 @@ def chart_fat_content(request):
     return render(
         request,
         "dashboard/partials/_chart_fat_content.html",
-        {"rows": selectors.sales_by_fat_content(_records(request))},
+        _widget_context(request, rows=selectors.sales_by_fat_content(_records(request))),
     )
 
 
@@ -291,7 +313,7 @@ def chart_rating(request):
     return render(
         request,
         "dashboard/partials/_chart_rating.html",
-        {"rows": selectors.rating_distribution(_records(request))},
+        _widget_context(request, rows=selectors.rating_distribution(_records(request))),
     )
 
 
@@ -299,13 +321,16 @@ def chart_year(request):
     return render(
         request,
         "dashboard/partials/_chart_year.html",
-        {"rows": selectors.sales_by_establishment_year(_records(request))},
+        _widget_context(request, rows=selectors.sales_by_establishment_year(_records(request))),
     )
 
 
 def top_items(request):
+    records = _records(request)
     return render(
         request,
         "dashboard/partials/_table_top_items.html",
-        {"top_bottom": selectors.top_bottom_items(_records(request))},
+        _widget_context(
+            request, top_bottom=selectors.top_bottom_items(records)
+        ),
     )

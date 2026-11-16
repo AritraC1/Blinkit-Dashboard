@@ -1291,3 +1291,32 @@ body.no-scroll { overflow: hidden; }
   .main-wrapper { padding: 12px 10px; padding-top: 68px !important; }
   .card { padding: 15px; }
 }
+
+.site-footer {
+  margin-top: 48px;
+  padding: 18px 14px;
+  border-top: 1px solid var(--bk-border);
+  background: var(--bk-card);
+  color: var(--bk-muted);
+  font-size: 0.78rem;
+}
+.site-footer-inner {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 24px;
+  align-items: center;
+  justify-content: space-between;
+}
+.site-footer-label {
+  color: var(--bk-muted);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.site-footer-value {
+  color: var(--bk-text);
+  font-weight: 600;
+}
+.site-footer-divider {
+  color: var(--bk-border);
+}

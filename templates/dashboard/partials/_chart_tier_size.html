@@ -1,7 +1,13 @@
-{# Chart: sales by location tier, one bar group per size. #}
-<h3 class="widget-title">Sales by Location Tier &amp; Outlet Size</h3>
-<div class="chart-wrap">
-  <canvas data-chart="grouped" data-source="chart-tier-size-data"></canvas>
+{# Chart: total sales per (location tier, outlet size) pair. #}
+<h3 class="widget-title">Sales by Tier &amp; Size</h3>
+{% if has_data %}
+<div class="chart-wrap chart-tall">
+  <canvas data-chart="bar" data-source="chart-tier-size-data"></canvas>
 </div>
-<p class="caption">Outlet size grouping is distorted by a few inconsistent outlets, so read this with care.</p>
 {{ rows|json_script:"chart-tier-size-data" }}
+{% else %}
+<div class="empty-state">
+  <p style="font-weight:600; margin:0 0 4px;">{% if not db_has_data %}No data loaded yet{% else %}No records match the current filters{% endif %}.</p>
+  <p style="font-size:0.82rem; margin:0;">{% if not db_has_data %}Run <code>uv run python manage.py run_etl</code> to import sales data.{% else %}Try widening the filter selection.{% endif %}</p>
+</div>
+{% endif %}

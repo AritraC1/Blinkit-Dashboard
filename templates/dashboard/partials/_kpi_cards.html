@@ -1,4 +1,26 @@
 {% load dashboard_extras %}
+{% if not db_has_data %}
+  <div class="empty-state">
+    <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="var(--bk-yellow)" stroke-width="1.5" stroke-linecap="round" style="display:block; margin:0 auto 14px;">
+      <circle cx="12" cy="12" r="10"/>
+      <line x1="12" y1="8" x2="12" y2="12"/>
+      <line x1="12" y1="16" x2="12.01" y2="16"/>
+    </svg>
+    <p style="font-weight:700; font-size:1rem; margin:0 0 6px; color:var(--bk-text);">No data loaded yet</p>
+    <p style="font-size:0.85rem; margin:0 0 14px;">The sales table is empty — import the Blinkit data first:</p>
+    <code style="background:#F4F5F7; border:1px solid var(--bk-border); padding:8px 14px; border-radius:8px; font-size:0.82rem; display:block; margin:0 0 14px; max-width: 420px;">uv run python manage.py run_etl</code>
+    <p style="font-size:0.85rem; margin:0;">KPI cards appear here once run_etl has loaded sales records.</p>
+  </div>
+{% elif not has_data %}
+  <div class="empty-state">
+    <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="var(--bk-muted)" stroke-width="1.5" stroke-linecap="round" style="display:block; margin:0 auto 12px;">
+      <circle cx="12" cy="12" r="10"/>
+      <polyline points="12 8 12 12 14 14"/>
+    </svg>
+    <p style="font-weight:600; margin:0 0 4px;">No records match the current filters</p>
+    <p style="font-size:0.82rem; margin:0;">Try widening the filter selection or reset the form.</p>
+  </div>
+{% else %}
 <div class="kpi-grid">
 
   <div class="kpi-card kpi-green">
@@ -62,3 +84,4 @@
   </div>
 
 </div>
+{% endif %}
