@@ -5,6 +5,7 @@
       hx-get="{% url 'dashboard:overview' %}"
       hx-target="#dashboard-area"
       hx-swap="outerHTML"
+      hx-include=".dashboard-header-bar input, .dashboard-header-bar select"
       hx-trigger="change, submit"
       hx-push-url="true">
   <div class="filter-group">

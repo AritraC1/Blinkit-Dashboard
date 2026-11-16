@@ -101,6 +101,7 @@ class FilterTests(SelectorTestCase):
     def test_each_filter_reduces_the_record_count(self):
         unfiltered = SalesRecord.objects.count()
         cases = [
+            {"outlet": "OUT010"},
             {"outlet_type": "Grocery Store"},
             {"location_tier": "Tier 1"},
             {"item_type": "Dairy"},

@@ -6,19 +6,21 @@ plain lists and dicts, so views and templates stay thin.
 
 from __future__ import annotations
 
-from django.db.models import Avg, Count, FloatField, Sum, Value
+from django.db.models import Avg, Count, FloatField, Q, Sum, Value
 from django.db.models.functions import Coalesce
 
 from apps.core.models import SalesRecord
 
 # The shared filter names. Everything is optional; blank values are ignored.
 FILTER_FIELDS = (
+    "outlet",
     "outlet_type",
     "location_tier",
     "item_type",
     "fat_content",
     "year_min",
     "year_max",
+    "q",
 )
 
 
@@ -43,6 +45,17 @@ def apply_filters(queryset, filters: dict | None):
     fat_content on Item; both reached through the SalesRecord joins.
     """
     filters = filters or {}
+    if filters.get("outlet"):
+        queryset = queryset.filter(outlet__outlet_id=filters["outlet"])
+    if filters.get("q"):
+        q = filters["q"]
+        queryset = queryset.filter(
+            Q(item__item_id__icontains=q)
+            | Q(item__item_type__icontains=q)
+            | Q(outlet__outlet_id__icontains=q)
+            | Q(outlet__outlet_type__icontains=q)
+            | Q(outlet__location_tier__icontains=q)
+        )
     if filters.get("outlet_type"):
         queryset = queryset.filter(outlet__outlet_type=filters["outlet_type"])
     if filters.get("location_tier"):

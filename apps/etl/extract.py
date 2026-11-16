@@ -25,7 +25,7 @@ EXPECTED_COLUMNS = [
     "Outlet Type",
     "Item Visibility",
     "Item Weight",
-    "Total Sales",
+    "Sales",
     "Rating",
 ]
 
@@ -73,7 +73,10 @@ def extract(path: str | Path | None = None) -> pd.DataFrame:
     df.columns = [str(col).strip() for col in df.columns]
 
     found = {_normalise(col) for col in df.columns}
-    missing = [col for col in EXPECTED_COLUMNS if _normalise(col) not in found]
+    missing = [
+        col for col in EXPECTED_COLUMNS
+        if _normalise(col) not in found and not (col == "Sales" and "total_sales" in found)
+    ]
     if missing:
         raise ExtractError(
             f"Raw data is missing {len(missing)} expected column(s): "

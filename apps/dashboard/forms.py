@@ -20,6 +20,7 @@ def _choices(values: list) -> list[tuple]:
 class FilterForm(forms.Form):
     """Every dashboard filter. All optional; blank values are ignored."""
 
+    outlet = forms.ChoiceField(required=False)
     outlet_type = forms.ChoiceField(required=False)
     location_tier = forms.ChoiceField(required=False)
     item_type = forms.ChoiceField(required=False)
@@ -30,12 +31,14 @@ class FilterForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+        outlets = Outlet.objects.values_list("outlet_id", flat=True)
         outlet_types = Outlet.objects.values_list("outlet_type", flat=True)
         tiers = Outlet.objects.values_list("location_tier", flat=True)
         item_types = Item.objects.values_list("item_type", flat=True)
         fat_contents = Item.objects.values_list("fat_content", flat=True)
         years = Outlet.objects.values_list("establishment_year", flat=True)
 
+        self.fields["outlet"].choices = [("", "ALL")] + _choices(list(outlets))
         self.fields["outlet_type"].choices = [("", "All outlet types")] + _choices(
             list(outlet_types)
         )

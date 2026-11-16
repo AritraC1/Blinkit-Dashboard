@@ -37,9 +37,11 @@ def _recent_predictions(n: int = 10):
 def overview(request):
     """Full page on normal requests; only the dashboard area for HTMX ones
     (used by the filter form, which targets #dashboard-area)."""
+    all_outlets = list(Outlet.objects.all().order_by("outlet_id"))
     context = {
         "filter_form": FilterForm(request.GET or None),
         "filters": _filters(request),
+        "all_outlets": all_outlets,
     }
     if request.headers.get("HX-Request"):
         return render(request, "dashboard/_dashboard_area.html", context)
