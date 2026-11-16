@@ -1,0 +1,44 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-blinkitadmin}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-blinkitadmin1115}
+      POSTGRES_DB: ${POSTGRES_DB:-blinkit}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  web:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "${WEB_PORT:-8000}:8000"
+    environment:
+      DJANGO_SETTINGS_MODULE: config.settings.prod
+      SECRET_KEY: ${SECRET_KEY:-change-me}
+      # Prod settings force DEBUG=False; this only matters if you swap in dev.py
+      DJANGO_DEBUG: ${DJANGO_DEBUG:-0}
+      ALLOWED_HOSTS: localhost,127.0.0.1,0.0.0.0
+      DATABASE_URL: postgres://${POSTGRES_USER:-blinkitadmin}:${POSTGRES_PASSWORD:-blinkitadmin1115}@db:5432/${POSTGRES_DB:-blinkit}
+      TIME_ZONE: ${TIME_ZONE:-UTC}
+      # The container runs without TLS in front, so disable the redirect here
+      SECURE_SSL_REDIRECT: ${SECURE_SSL_REDIRECT:-0}
+    volumes:
+      # Source data for the ETL (drop data/raw/BlinkIT_Grocery_Data.xlsx locally
+      # and it is available in the container without a rebuild)
+      - ./data/raw:/app/data/raw:ro
+      # Trained model artifacts produced by `train_model`
+      - ml_artifacts:/app/ml_artifacts
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  postgres_data:
+  ml_artifacts:

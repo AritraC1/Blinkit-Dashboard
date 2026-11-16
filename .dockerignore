@@ -1,0 +1,30 @@
+# Python
+venv
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+
+# Django
+db.sqlite3
+staticfiles/
+media/
+
+# Secrets
+.env
+
+# ML artifacts and processed data (keep the folders, ignore the files)
+ml_artifacts
+ml_artifacts/*
+!ml_artifacts/.gitkeep
+data/processed/*
+!data/processed/.gitkeep
+
+# OS / editors
+.DS_Store
+.idea/
+.vscode/
+
+# Dockerfile
+Dockerfile
