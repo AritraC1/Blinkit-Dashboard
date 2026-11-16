@@ -1,1 +1,28 @@
-{# ML: active model R2/MAE/RMSE next to the baseline. #}
+{# ML: active model R2/MAE/RMSE next to the baseline, plus version and trained date. #}
+<h3 class="widget-title">Model Scorecard — {{ run.algorithm }}</h3>
+<p class="model-meta">
+  {{ run.version }} · trained {{ run.trained_at|date:"Y-m-d H:i" }} ·
+  {{ run.train_size }} train / {{ run.test_size }} held-out rows
+</p>
+<table class="data-table metrics-table">
+  <thead>
+    <tr><th></th><th>R²</th><th>MAE</th><th>RMSE</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>{{ run.algorithm }} (held-out)</th>
+      <td>{{ run.metrics.r2|floatformat:3 }}</td>
+      <td>{{ run.metrics.mae|floatformat:1 }}</td>
+      <td>{{ run.metrics.rmse|floatformat:1 }}</td>
+    </tr>
+    <tr>
+      <th>Baseline (predict the mean)</th>
+      <td>{{ baseline.r2|floatformat:3 }}</td>
+      <td>{{ baseline.mae|floatformat:1 }}</td>
+      <td>{{ baseline.rmse|floatformat:1 }}</td>
+    </tr>
+  </tbody>
+</table>
+<p class="caption">
+  R² closer to 1 is better; MAE/RMSE are typical errors in sales units, lower is better.
+</p>

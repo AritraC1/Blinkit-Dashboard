@@ -1,0 +1,48 @@
+{# ML: predicted sales for every item type at one outlet profile. The selects re-request this partial on change. #}
+<h3 class="widget-title">Predicted Sales by Item Type</h3>
+<form class="profile-form"
+      hx-get="{% url 'dashboard:partials_item_type_predictions' %}"
+      hx-target="#item-type-predictions"
+      hx-swap="innerHTML"
+      hx-trigger="change">
+  <label for="profile-outlet-type">Outlet type</label>
+  <select id="profile-outlet-type" name="outlet_type">
+    {% for option in options.outlet_type %}
+      <option value="{{ option.value }}"{% if option.selected %} selected{% endif %}>{{ option.value }}</option>
+    {% endfor %}
+  </select>
+  <label for="profile-location-tier">Location tier</label>
+  <select id="profile-location-tier" name="location_tier">
+    {% for option in options.location_tier %}
+      <option value="{{ option.value }}"{% if option.selected %} selected{% endif %}>{{ option.value }}</option>
+    {% endfor %}
+  </select>
+  <label for="profile-year">Established</label>
+  <select id="profile-year" name="establishment_year">
+    {% for option in options.establishment_year %}
+      <option value="{{ option.value }}"{% if option.selected %} selected{% endif %}>{{ option.value }}</option>
+    {% endfor %}
+  </select>
+</form>
+{% if error %}
+  <p class="empty-state">{{ error }}</p>
+{% endif %}
+<table class="data-table">
+  <thead>
+    <tr><th>Item Type</th><th>Predicted Sales</th></tr>
+  </thead>
+  <tbody>
+    {% for row in rows %}
+      <tr>
+        <td>{{ row.item_type }}</td>
+        <td>{{ row.predicted|floatformat:1 }}</td>
+      </tr>
+    {% empty %}
+      <tr><td colspan="2">No item types found in the data.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+<p class="caption">
+  Each item type is represented by its typical attributes (mean weight, most
+  common fat content and category, average visibility) at the chosen outlet.
+</p>

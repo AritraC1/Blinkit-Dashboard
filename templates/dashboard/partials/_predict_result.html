@@ -1,1 +1,14 @@
-{# ML: predicted sales value + model version. #}
+{# ML: the prediction output - value, typical-error range, model version. Also refreshes the recent-predictions widget out-of-band. #}
+<h3 class="widget-title">Predicted Sales</h3>
+<div class="result-value">{{ result.value|floatformat:1 }}</div>
+<p class="result-range">
+  Typical error ±{{ result.typical_error|floatformat:1 }} — likely between
+  {{ result.low|floatformat:1 }} and {{ result.high|floatformat:1 }}.
+</p>
+<p class="caption">
+  90% of predictions land within ±{{ result.p90_error|floatformat:1 }} ·
+  model {{ result.model_version }}
+</p>
+<div id="recent-predictions-box" hx-swap-oob="innerHTML">
+  {% include "dashboard/partials/_recent_predictions.html" %}
+</div>

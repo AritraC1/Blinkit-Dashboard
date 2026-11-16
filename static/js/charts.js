@@ -150,6 +150,110 @@
     };
   }
 
+  function hbarValueConfig(data) {
+    // Generic horizontal bar for {label, value} rows (e.g. feature
+    // importance). Sorted ascending so the largest value ends up on top.
+    const sorted = [...data].sort((a, b) => a.value - b.value);
+    return {
+      type: "bar",
+      data: {
+        labels: sorted.map((r) => r.label),
+        datasets: [
+          {
+            label: "Value",
+            data: sorted.map((r) => r.value),
+            backgroundColor: sorted.map((_, i) => PALETTE[i % PALETTE.length]),
+            borderRadius: 4
+          }
+        ]
+      },
+      options: {
+        ...BASE_OPTIONS,
+        indexAxis: "y",
+        plugins: {
+          ...BASE_OPTIONS.plugins,
+          tooltip: {
+            callbacks: {
+              label: (ctx) => Number(ctx.parsed.x).toLocaleString(undefined, {
+                maximumFractionDigits: 4
+              })
+            }
+          }
+        }
+      }
+    };
+  }
+
+  function scatterConfig(points) {
+    // Scatter of {actual, predicted} plus a dashed diagonal reference line.
+    const values = points
+      .flatMap((p) => [p.actual, p.predicted])
+      .filter((v) => Number.isFinite(v));
+    if (!values.length) {
+      return null;
+    }
+    const lo = Math.min(...values);
+    const hi = Math.max(...values);
+    const pad = (hi - lo) * 0.05 || 1;
+    const start = Math.max(0, lo - pad);
+    const end = hi + pad;
+    return {
+      type: "scatter",
+      data: {
+        datasets: [
+          {
+            label: "Predictions",
+            data: points.map((p) => ({ x: p.actual, y: p.predicted })),
+            backgroundColor: PALETTE[1],
+            pointRadius: 5
+          },
+          {
+            label: "Perfect prediction",
+            type: "line",
+            data: [
+              { x: start, y: start },
+              { x: end, y: end }
+            ],
+            borderColor: "#9aa2b1",
+            borderDash: [6, 4],
+            borderWidth: 1,
+            pointRadius: 0,
+            fill: false
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: true, position: "top" },
+          tooltip: {
+            callbacks: {
+              label: (ctx) =>
+                "actual " + Number(ctx.parsed.x).toLocaleString(undefined, {
+                  maximumFractionDigits: 1
+                }) + " / predicted " + Number(ctx.parsed.y).toLocaleString(undefined, {
+                  maximumFractionDigits: 1
+                })
+            }
+          }
+        },
+        scales: {
+          x: {
+            title: { display: true, text: "Actual sales" },
+            ticks: { color: "#5a6270" },
+            grid: { color: "#eef0f4" }
+          },
+          y: {
+            title: { display: true, text: "Predicted sales" },
+            ticks: { color: "#5a6270" },
+            grid: { color: "#eef0f4" }
+          }
+        }
+      }
+    };
+  }
+
   function buildChart(canvas) {
     if (!window.Chart || !canvas) return;
     const source = document.getElementById(canvas.dataset.source);
@@ -170,6 +274,13 @@
         break;
       case "bar-horizontal":
         new Chart(canvas, barConfig(list(data), { indexAxis: "y" }));
+        break;
+      case "bar-horizontal-value":
+        new Chart(canvas, hbarValueConfig(list(data)));
+        break;
+      case "scatter":
+        const config = scatterConfig(list(data));
+        if (config) new Chart(canvas, config);
         break;
       case "line":
         new Chart(canvas, lineConfig(list(data)));

@@ -1,6 +1,71 @@
 {% extends "base.html" %}
 {% block title %}Predictions | Blinkit Dashboard{% endblock %}
 {% block content %}
-  <h1>Predictions</h1>
-  <p>Placeholder for the model metrics, feature importance and the what-if prediction form.</p>
+<h1>Predictions</h1>
+
+{% if has_model %}
+  {# Model card on top #}
+  <div class="card widget"
+       id="model-metrics"
+       hx-get="{% url 'dashboard:partials_model_metrics' %}"
+       hx-trigger="load"
+       hx-swap="innerHTML">
+    <div class="htmx-indicator widget-loading"><span class="spinner"></span>Loading…</div>
+  </div>
+
+  {# Charts in the middle #}
+  <div class="chart-grid">
+    <div class="card widget"
+         id="feature-importance"
+         hx-get="{% url 'dashboard:partials_feature_importance' %}"
+         hx-trigger="load"
+         hx-swap="innerHTML">
+      <div class="htmx-indicator widget-loading"><span class="spinner"></span>Loading…</div>
+    </div>
+
+    <div class="card widget"
+         id="chart-actual-vs-predicted"
+         hx-get="{% url 'dashboard:partials_chart_actual_vs_predicted' %}"
+         hx-trigger="load"
+         hx-swap="innerHTML">
+      <div class="htmx-indicator widget-loading"><span class="spinner"></span>Loading…</div>
+    </div>
+
+    <div class="card widget"
+         id="item-type-predictions"
+         hx-get="{% url 'dashboard:partials_item_type_predictions' %}"
+         hx-trigger="load"
+         hx-swap="innerHTML">
+      <div class="htmx-indicator widget-loading"><span class="spinner"></span>Loading…</div>
+    </div>
+  </div>
+
+  {# Form and result at the bottom #}
+  <div class="predict-layout">
+    <div class="card"
+         id="predict-form-box"
+         hx-get="{% url 'dashboard:partials_predict_form' %}"
+         hx-trigger="load"
+         hx-swap="innerHTML">
+      <div class="htmx-indicator widget-loading"><span class="spinner"></span>Loading…</div>
+    </div>
+    <div class="card" id="predict-result">
+      <p class="empty-state">Fill in the form to get a predicted sales value.</p>
+    </div>
+  </div>
+
+  <div class="card widget recent-predictions"
+       id="recent-predictions-box"
+       hx-get="{% url 'dashboard:partials_recent_predictions' %}"
+       hx-trigger="load"
+       hx-swap="innerHTML">
+    <div class="htmx-indicator widget-loading"><span class="spinner"></span>Loading…</div>
+  </div>
+{% else %}
+  <div class="card">
+    <p class="empty-state">
+      No model trained yet — run <code>uv run python manage.py train_model</code>.
+    </p>
+  </div>
+{% endif %}
 {% endblock %}

@@ -1,1 +1,7 @@
-{# ML: feature importance chart. #}
+{# ML: permutation importance as a horizontal bar chart. #}
+<h3 class="widget-title">Feature Importance</h3>
+<p class="caption">Permutation importance on held-out rows (drop in R² when the feature is shuffled).</p>
+<div class="chart-wrap chart-tall">
+  <canvas data-chart="bar-horizontal-value" data-source="feature-importance-data"></canvas>
+</div>
+{{ rows|json_script:"feature-importance-data" }}

@@ -1,1 +1,29 @@
-{# ML: what-if form, hx-post targeting the result box. #}
+{# ML: what-if form, hx-post targeting the result box (#predict-result). Errors are re-rendered here with messages and swap back in out-of-band. #}
+<h3 class="widget-title">What-if Prediction</h3>
+<form hx-post="{% url 'dashboard:run_prediction' %}"
+      hx-target="#predict-result"
+      hx-swap="innerHTML">
+  {% if form.non_field_errors %}
+    <ul class="errorlist">
+      {% for error in form.non_field_errors %}<li>{{ error }}</li>{% endfor %}
+    </ul>
+  {% endif %}
+  <div class="form-grid">
+    {% for field in form %}
+      <div class="form-field">
+        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+        {{ field }}
+        {% if field.help_text %}<p class="field-help">{{ field.help_text }}</p>{% endif %}
+        {% if field.errors %}
+          <ul class="errorlist">
+            {% for error in field.errors %}<li>{{ error }}</li>{% endfor %}
+          </ul>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+  <div class="predict-form-actions">
+    <button type="submit" class="btn">Predict</button>
+    <span class="htmx-indicator widget-loading"><span class="spinner"></span>Predicting…</span>
+  </div>
+</form>

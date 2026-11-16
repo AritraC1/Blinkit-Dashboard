@@ -1,0 +1,19 @@
+{# ML: the last 10 PredictionLog rows - a visible history of what was served. #}
+<h3 class="widget-title">Recent Predictions</h3>
+<table class="data-table">
+  <thead>
+    <tr><th>When</th><th>Input</th><th>Predicted</th><th>Model</th></tr>
+  </thead>
+  <tbody>
+    {% for log in logs %}
+      <tr>
+        <td>{{ log.created_at|date:"m-d H:i" }}</td>
+        <td>{{ log.inputs.item_type }} @ {{ log.inputs.outlet_type }}</td>
+        <td>{{ log.predicted_value|floatformat:1 }}</td>
+        <td class="mono">{{ log.model_run.version|truncatechars:28 }}</td>
+      </tr>
+    {% empty %}
+      <tr><td colspan="4">No predictions yet.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>

@@ -1,0 +1,6 @@
+{# ML: failed POST response, rendered into #predict-result. The errored form itself swaps back into the form box out-of-band, so it stays in its own column. #}
+<h3 class="widget-title">Prediction Failed</h3>
+<p class="empty-state">Fix the highlighted fields and try again.</p>
+<div id="predict-form-box" hx-swap-oob="innerHTML">
+  {% include "dashboard/partials/_predict_form.html" %}
+</div>

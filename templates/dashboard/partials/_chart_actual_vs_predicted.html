@@ -1,0 +1,7 @@
+{# ML: actual vs predicted on held-out rows, with a diagonal "perfect prediction" line. #}
+<h3 class="widget-title">Actual vs Predicted</h3>
+<p class="caption">Held-out sample. Points on the dashed line were predicted exactly.</p>
+<div class="chart-wrap">
+  <canvas data-chart="scatter" data-source="chart-avp-data"></canvas>
+</div>
+{{ points|json_script:"chart-avp-data" }}
