@@ -22,3 +22,5 @@ Copy `.env.example` to `.env` and set `SECRET_KEY` on a fresh clone.
 - `apps/ml` - features, training, evaluation, registry, prediction
 - `apps/dashboard` - views and HTMX partial endpoints
 - `templates/dashboard/partials` - HTMX fragments
+
+---
