@@ -1,0 +1,26 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Blinkit Dashboard{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'css/app.css' %}">
+  <script src="{% static 'vendor/htmx.min.js' %}" defer></script>
+  <script src="{% static 'vendor/chart.umd.js' %}" defer></script>
+  <script src="{% static 'js/charts.js' %}" defer></script>
+</head>
+{# The header below makes every HTMX POST carry Django's CSRF token #}
+<body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+  <header class="topbar">
+    <strong>Blinkit Dashboard</strong>
+    <nav>
+      <a href="{% url 'dashboard:overview' %}">Overview</a>
+      <a href="{% url 'dashboard:predictions' %}">Predictions</a>
+    </nav>
+  </header>
+  <main class="container">
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>
