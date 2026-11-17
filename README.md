@@ -4,9 +4,9 @@ A Django dashboard for exploring Blinkit grocery sales data. It includes an ETL 
 
 ## Features
 
-- **Sales overview:** KPI cards, item and outlet charts, top and bottom items,and filters for outlets, outlet type, location tier, item type fat content, establishment year, and text search.
+- **Sales overview:** KPI cards, item, outlet, fat content, tier, and establishment-year charts, top and bottom items, and filters for outlets, outlet type, location tier, item type, fat content, establishment year, and text search.
 - **Predictions:** model performance metrics, feature importance, actual vs. predicted results, item-type comparisons, and an interactive prediction form.
-- **ETL:** extract data from Excel, transform and validate it, load it into the database, and optionally export a cleaned CSV.
+- **ETL:** extract data from Excel, transform and validate it, load it into the database, and optionally export a cleaned CSV. The dashboard shows the active data source and last ETL run in its footer, with empty states when no data is loaded.
 - **Model training:** compare Ridge, Random Forest, and Gradient Boosting regressors against a mean baseline, evaluate with item-grouped splits, and register the best model.
 - **Responsive updates:** dashboard widgets use HTMX; charts are rendered with Chart.js.
 
@@ -38,10 +38,11 @@ uv run python manage.py runserver
 
 Open [http://127.0.0.1:8000](http://127.0.0.1:8000). Create an admin account if needed with `uv run python manage.py createsuperuser`; the Django admin is at `/admin/`.
 
-The ETL reads `data/raw/BlinkIT_Grocery_Data.xlsx` by default and writes the cleaned dataset to `data/processed/cleaned_sales.csv`. To use another workbook or validate without loading it:
+The ETL reads `data/raw/BlinkIT_Grocery_Data.xlsx` by default and writes the cleaned dataset to `data/processed/cleaned_sales.csv`. To use another workbook, skip the CSV export, or validate without loading:
 
 ```bash
 uv run python manage.py run_etl --file path/to/data.xlsx
+uv run python manage.py run_etl --no-csv
 uv run python manage.py run_etl --dry-run
 ```
 
@@ -91,7 +92,7 @@ docker compose exec web python manage.py train_model
 docker compose exec web python manage.py createsuperuser
 ```
 
-The app is available at [http://localhost:8001](http://localhost:8001) by default. Set `WEB_PORT` to change the host port. Configure `SECRET_KEY`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, and `POSTGRES_DB` through environment variables or a `.env` file. Compose's database credentials are for local development only; replace them before using this setup in a shared or deployed environment.
+The app is available at [http://localhost:8000](http://localhost:8000) by default. Set `WEB_PORT` to change the host port. Configure `SECRET_KEY`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, and `POSTGRES_DB` through environment variables or a `.env` file. Compose's database credentials are for local development only; replace them before using this setup in a shared or deployed environment.
 
 ## Project structure
 
