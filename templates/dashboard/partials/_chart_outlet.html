@@ -1,8 +1,8 @@
-{# Chart: total and average sales per outlet type. #}
-<h3 class="widget-title">Sales by Outlet Type</h3>
+{# Chart: sales share per outlet type (pie with % labels). #}
+<h3 class="widget-title">Sales Share by Outlet Type</h3>
 {% if has_data %}
 <div class="chart-wrap chart-tall">
-  <canvas data-chart="bar" data-source="chart-outlet-data"></canvas>
+  <canvas data-chart="pie" data-source="chart-outlet-data"></canvas>
 </div>
 {{ rows|json_script:"chart-outlet-data" }}
 {% else %}

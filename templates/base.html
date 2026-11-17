@@ -128,22 +128,24 @@
   <!-- ═══════════════════════════════════════
        MAIN CONTENT
   ════════════════════════════════════════ -->
-  <div class="main-wrapper" id="main-wrapper">
-    {% block content %}{% endblock %}
-  </div>
-
-  <!-- Site footer: data source and last ETL date -->
-  <footer class="site-footer">
-    <div class="site-footer-inner">
-      <span class="site-footer-label">Data source:</span>
-      <span class="site-footer-value">{{ etl_data_source }}</span>
-      <span class="site-footer-divider">·</span>
-      <span class="site-footer-label">Last ETL:</span>
-      <span class="site-footer-value">
-        {% if etl_last_run %}{{ etl_last_run|date:"d M Y, H:i" }}{% else %}not yet run{% endif %}
-      </span>
+  <div class="main-content">
+    <div class="main-wrapper" id="main-wrapper">
+      {% block content %}{% endblock %}
     </div>
-  </footer>
+
+    <!-- Site footer: data source and last ETL date -->
+    <footer class="site-footer">
+      <div class="site-footer-inner">
+        <span class="site-footer-label">Data source:</span>
+        <span class="site-footer-value">{{ etl_data_source }}</span>
+        <span class="site-footer-divider">·</span>
+        <span class="site-footer-label">Last ETL:</span>
+        <span class="site-footer-value">
+          {% if etl_last_run %}{{ etl_last_run|date:"d M Y, H:i" }}{% else %}not yet run{% endif %}
+        </span>
+      </div>
+    </footer>
+  </div>
 
   <script>
     (function () {

@@ -1,8 +1,8 @@
-{# Chart: total sales per outlet establishment year. #}
-<h3 class="widget-title">Sales by Establishment Year</h3>
+{# Chart: sales per outlet establishment year as a line (time-ordered). #}
+<h3 class="widget-title">Sales Trend by Establishment Year</h3>
 {% if has_data %}
 <div class="chart-wrap chart-tall">
-  <canvas data-chart="bar" data-source="chart-year-data"></canvas>
+  <canvas data-chart="line" data-source="chart-year-data"></canvas>
 </div>
 {{ rows|json_script:"chart-year-data" }}
 {% else %}

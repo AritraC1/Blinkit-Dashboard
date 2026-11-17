@@ -256,20 +256,33 @@ class ViewTests(SelectorTestCase):
 
     def test_chart_partials_render_canvas_and_data(self):
         cases = [
-            ("dashboard:partials_chart_item_type", "chart-item-type-data"),
-            ("dashboard:partials_chart_outlet", "chart-outlet-data"),
-            ("dashboard:partials_chart_tier_size", "chart-tier-size-data"),
-            ("dashboard:partials_chart_fat_content", "chart-fat-content-data"),
-            ("dashboard:partials_chart_rating", "chart-rating-data"),
-            ("dashboard:partials_chart_year", "chart-year-data"),
+            (
+                "dashboard:partials_chart_item_type",
+                "chart-item-type-data",
+                "bar-horizontal",
+            ),
+            ("dashboard:partials_chart_outlet", "chart-outlet-data", "pie"),
+            (
+                "dashboard:partials_chart_tier_size",
+                "chart-tier-size-data",
+                "bar-stacked-h",
+            ),
+            (
+                "dashboard:partials_chart_fat_content",
+                "chart-fat-content-data",
+                "polar-area",
+            ),
+            ("dashboard:partials_chart_rating", "chart-rating-data", "histogram"),
+            ("dashboard:partials_chart_year", "chart-year-data", "line"),
         ]
-        for url_name, data_id in cases:
+        for url_name, data_id, chart_type in cases:
             with self.subTest(url_name=url_name):
                 response = self.client.get(reverse(url_name))
                 self.assertEqual(response.status_code, 200)
                 content = response.content.decode()
                 self.assertIn("<canvas", content)
                 self.assertIn(data_id, content)
+                self.assertIn(f'data-chart="{chart_type}"', content)
 
     def test_top_items_partial(self):
         response = self.client.get(reverse("dashboard:partials_top_items"))

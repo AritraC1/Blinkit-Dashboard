@@ -1,8 +1,8 @@
-{# Chart: total sales per fat content value. #}
+{# Chart: sales per fat content value as a polar-area chart. #}
 <h3 class="widget-title">Sales by Fat Content</h3>
 {% if has_data %}
 <div class="chart-wrap">
-  <canvas data-chart="bar" data-source="chart-fat-content-data"></canvas>
+  <canvas data-chart="polar-area" data-source="chart-fat-content-data"></canvas>
 </div>
 {{ rows|json_script:"chart-fat-content-data" }}
 {% else %}

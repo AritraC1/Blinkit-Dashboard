@@ -1,8 +1,8 @@
-{# Chart: total sales per (location tier, outlet size) pair. #}
+{# Chart: sales per (location tier, outlet size) pair as a stacked horizontal bar. #}
 <h3 class="widget-title">Sales by Tier &amp; Size</h3>
 {% if has_data %}
 <div class="chart-wrap chart-tall">
-  <canvas data-chart="bar" data-source="chart-tier-size-data"></canvas>
+  <canvas data-chart="bar-stacked-h" data-source="chart-tier-size-data"></canvas>
 </div>
 {{ rows|json_script:"chart-tier-size-data" }}
 {% else %}
